@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         EventSimulation simulation = new EventSimulation();
 
-        simulation.addTechnician(new Technician("Tech1", 40.7128, -74.0060)); // New York
+        simulation.addTechnician(new Technician("Tech1", 40.7128, -73.00905)); // New York
         simulation.addTechnician(new Technician("Tech2", 34.0522, -118.2437)); // Los Angeles
         simulation.addTechnician(new Technician("Tech3", 51.5074, -0.1278)); // London
         simulation.addTechnician(new Technician("Tech4", 48.8566, 2.3522)); // Paris
@@ -15,7 +15,7 @@ public class Main {
 
         // Generate a random maintenance event and robot
         Robot robot = new Robot("Maintenance");
-        Location robotLocation = new Location(40.713, -73.0090); // Example location (New York)
+        Location robotLocation = new Location(40.714, -73.0095); // Example location (New York)
         robot.setLocation(robotLocation);
 
         System.out.println("Robot generated with status: " + robot.getStatus());

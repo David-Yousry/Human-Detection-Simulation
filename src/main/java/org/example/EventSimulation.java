@@ -64,7 +64,7 @@ public class EventSimulation {
 
         while (remainingDistance > 0.0001) {
 
-            double stepSize = Math.min(remainingDistance, 0.0005); // Larger step size (0.0005 degrees)
+            double stepSize = Math.min(remainingDistance, 0.05); // Larger step size (0.0005 degrees)
 
             // Calculate the step in latitude and longitude
             double latStep = (targetLocation.getLatitude() - technician.getLocation().getLatitude()) * stepSize / totalDistance;
@@ -81,8 +81,11 @@ public class EventSimulation {
                     + technician.getLocation().getLongitude() + "]");
 
             // Simulate time delay for each movement
-            Thread.sleep(500); // Adjust sleep time to control speed
+            Thread.sleep(1); // Adjust sleep time to control speed
         }
+
+        technician.setLocation(targetLocation);
+        System.out.println("Technician Location: " + technician.getLocation().getLatitude() + ", " + technician.getLocation().getLongitude());
 
         System.out.println("Technician " + technician.getName() + " has reached the target location.");
     }

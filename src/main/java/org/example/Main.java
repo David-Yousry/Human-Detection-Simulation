@@ -1,36 +1,99 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Main {
-    public static void main(String[] args) throws InterruptedException {
-        EventSimulation simulation = new EventSimulation();
+import static org.example.RobotSimulation.*;
 
-        simulation.addTechnician(new Technician("Tech1", 40.7128, -73.00905)); // New York
-        simulation.addTechnician(new Technician("Tech2", 34.0522, -118.2437)); // Los Angeles
-        simulation.addTechnician(new Technician("Tech3", 51.5074, -0.1278)); // London
-        simulation.addTechnician(new Technician("Tech4", 48.8566, 2.3522)); // Paris
-        simulation.addTechnician(new Technician("Tech5", 35.6895, 139.6917)); // Tokyo
+
+public class Main {
+
+
+    public static void main(String[] args) throws InterruptedException {
+
+//        EventSimulation.addTechnician(new Technician("Tech1")); // New York
+//        EventSimulation.addTechnician(new Technician("Tech2")); // Los Angeles
+//        EventSimulation.addTechnician(new Technician("Tech3")); // London
+//        EventSimulation.addTechnician(new Technician("Tech4")); // Paris
+//        EventSimulation.addTechnician(new Technician("Tech5")); // Tokyo
 
         // Generate a random maintenance event and robot
-        Robot robot = new Robot("Maintenance");
-        Location robotLocation = new Location(40.714, -73.0095); // Example location (New York)
-        robot.setLocation(robotLocation);
 
-        System.out.println("Robot generated with status: " + robot.getStatus());
-        System.out.println("Robot's initial location: " + robot.getLocation().getLatitude() + ", " + robot.getLocation().getLongitude());
+//        Robot robot = generateRandomRobot();
+        List<Robot> robots = new ArrayList<>();
+        int robotsCount;
+        // remove this later when we handle the random location generation
+//        Location robotLocation = new Location(40.714, -73.0095); // Example location (New York)
+//        robot.setLocation(robotLocation);
+        boolean techniciansPrinted = false;
 
-        // Find the nearest technician
-        Technician nearestTech = simulation.findNearestTechnician(robot.getLocation());
-        System.out.println("Nearest technician: " + nearestTech.getName());
 
-        // Move technician to the robot's loc
-        simulation.moveTechnician(nearestTech, robot.getLocation());
+        while (true) {
 
-        // Simulate maintenance duration
-        int duration = simulation.maintenanceDuration();
-        System.out.println("Maintenance duration: " + duration + " minutes.");
+            Thread.sleep(500);
+            MQTT.main(null);
+
+            if(EventSimulation.technicians==null){
+                System.out.println("No technicians available");
+                continue;
+            }else{
+                if(!techniciansPrinted) {
+                    techniciansPrinted = true;
+                    for (Technician technician : EventSimulation.technicians) {
+                        System.out.println(technician.getId() + ",, " + technician.getName());
+                    }
+                }
+            }
+
+            if (MQTT.robotsCount == 0) {
+                System.out.println("No robots available");
+                continue;
+            }
+
+            robotsCount = MQTT.robotsCount;
+            System.out.println("Robots count: " + robotsCount);
+
+            while (robotsCount > 0) {
+                robots.add(generateRandomRobot());
+                robotsCount--;
+            }
+            robotsCount = MQTT.robotsCount;
+
+//            while(robotsCount > 0){
+//                MultiThreading multiThreading = new MultiThreading(robots.get(robotsCount-1),robotsCount);
+//                multiThreading.start();
+//                robotsCount--;
+//            }
+
+            moveRobotsSimultaneously(robots);
+
+
+//            System.out.println("######################################################################################");
+
+//            System.out.println("Robot location: " + robot.getLocation().getLatitude() + ", " + robot.getLocation().getLongitude());
+//            System.out.println("Robot battery level: " + robot.getBatteryLevel());
+//            moveRobotRandomly(robot, 10);
+
+
+//            System.out.println("Robot generated with status: " + robot.getStatus());
+//            System.out.println("Robot's initial location: " + robot.getLocation().getLatitude() + ", " + robot.getLocation().getLongitude());
+
+            // Find the nearest technician
+//            Technician nearestTech = simulation.findNearestTechnician(robot.getLocation());
+//            System.out.println("Nearest technician: " + nearestTech.getName());
+//
+//            // Move technician to the robot's loc
+//            simulation.moveTechnician(nearestTech, robot.getLocation());
+//
+//            // Simulate maintenance duration
+//            int duration = simulation.maintenanceDuration();
+//            System.out.println("Maintenance duration: " + duration + " minutes.");
+
+//            System.out.println("######################################################################################");
+        }
+
 
     }
 }

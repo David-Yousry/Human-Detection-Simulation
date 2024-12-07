@@ -6,32 +6,24 @@ import java.util.Random;
 
 public class EventSimulation {
 
-    private List<Technician> technicians;
-
-    public EventSimulation() {
-        this.technicians = new ArrayList<>();
-    }
-
-    public void addTechnician(Technician technician) {
-        technicians.add(technician);
-    }
+    public static List<Technician> technicians;
 
 
-    public Event generateEvent() {
+    public static void generateEvent(Robot robot) {
         Random random = new Random();
-        boolean eventHappens = random.nextBoolean(); // 50% chance
-        if (!eventHappens) return null;
+        int eventHappens = random.nextInt(0,10);
+        if (eventHappens>5) return;
 
         String[] eventTypes = {"humanDetection", "lowBattery", "maintenance"};
         String eventType = eventTypes[random.nextInt(eventTypes.length)];
-        double latitude = -90 + (90 + 90) * random.nextDouble();
-        double longitude = -180 + (180 + 180) * random.nextDouble();
+        System.out.println("Event type: " + eventType);
 
-        return new Event(eventType, latitude, longitude);
+        robot.setEvent( new Event(eventType, robot.getLocation().getLatitude(), robot.getLocation().getLongitude()));
+
     }
 
     // Calculate distance between two locations using Haversine formula
-    public double calculateDistance(Location loc1, Location loc2) {
+    public static double calculateDistance(Location loc1, Location loc2) {
         final int R = 6371; // Earth radius in kilometers
         double latDistance = Math.toRadians(loc2.getLatitude() - loc1.getLatitude());
         double lonDistance = Math.toRadians(loc2.getLongitude() - loc1.getLongitude());
@@ -43,28 +35,29 @@ public class EventSimulation {
     }
 
     // Find the nearest technician
-    public Technician findNearestTechnician(Location eventLocation) {
+    public static Technician findNearestTechnician(Location eventLocation) {
         Technician nearestTech = null;
         double shortestDistance = Double.MAX_VALUE;
 
         for (Technician tech : technicians) {
             double distance = calculateDistance(eventLocation, tech.getLocation());
-            if (distance < shortestDistance) {
+            if (distance < shortestDistance && !tech.isOnDuty()) {
                 shortestDistance = distance;
                 nearestTech = tech;
             }
         }
+        nearestTech.setOnDuty(true);
         return nearestTech;
     }
 
 
-    public void moveTechnician(Technician technician, Location targetLocation) throws InterruptedException {
+    public static void moveTechnician(Technician technician, Location targetLocation) throws InterruptedException {
         double totalDistance = calculateDistance(technician.getLocation(), targetLocation);
         double remainingDistance = totalDistance;
 
         while (remainingDistance > 0.0001) {
 
-            double stepSize = Math.min(remainingDistance, 0.05); // Larger step size (0.0005 degrees)
+            double stepSize = Math.min(remainingDistance, 0.01); // Larger step size (0.0005 degrees)
 
             // Calculate the step in latitude and longitude
             double latStep = (targetLocation.getLatitude() - technician.getLocation().getLatitude()) * stepSize / totalDistance;
@@ -88,13 +81,14 @@ public class EventSimulation {
         System.out.println("Technician Location: " + technician.getLocation().getLatitude() + ", " + technician.getLocation().getLongitude());
 
         System.out.println("Technician " + technician.getName() + " has reached the target location.");
+        technician.setOnDuty(false);
     }
 
 
 
 
     // Simulate maintenance duration
-    public int maintenanceDuration() {
+    public static int maintenanceDuration() {
         return new Random().nextInt(5) + 1; // Random duration between 1 and 5 minutes
     }
 }

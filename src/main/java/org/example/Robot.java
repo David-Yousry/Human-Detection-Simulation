@@ -4,6 +4,8 @@ public class Robot {
     private Location location;
     private String status;
     private int batteryLevel;
+    private Event event;
+    private boolean isMovable = true;
 
 
     public Robot(String status) {
@@ -48,6 +50,22 @@ public class Robot {
 
     public void moveLeft(double distance){
         this.location.setLatitude(this.location.getLatitude()-distance);
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    public boolean isMovable() {
+        return isMovable;
+    }
+
+    public void setMovable(boolean isMovable) {
+        this.isMovable = isMovable;
     }
 
 

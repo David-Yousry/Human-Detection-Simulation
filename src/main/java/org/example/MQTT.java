@@ -8,12 +8,12 @@ public class MQTT {
 
     public static int robotsCount = 0;
     public static String techniciansString = "";
+    public static boolean once;
 
-    public static void main(String[] args) {
+    public static void subscribeToRobotCount() {
         String broker = "tcp://localhost:1883";
         String clientId = "JavaSimulator";
         String robotCountTopic = "device/robotCount";
-        String techniciansTopic = "device/technicians";
 
         try {
             MqttClient client = new MqttClient(broker, clientId);
@@ -26,39 +26,53 @@ public class MQTT {
                 robotsCount = Integer.parseInt(new String(message.getPayload()));
                 System.out.println("Topic: " + topic1);
             });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            client.subscribe(techniciansTopic, (topic1, message) -> {
-//                System.out.println("Received message: " + new String(message.getPayload()));
-                techniciansString = new String(message.getPayload());
-                EventSimulation.technicians = MyJsonParser.createTechniciansFromJson(techniciansString);
-                System.out.println("Topic: " + topic1);
-            });
+        // publish
+    }
 
-//            client.disconnect();
+    public static void publishMalfunctionedRobot( Location robotLocation) {
+        String broker = "tcp://localhost:1883";
+        String clientId = "JavaSimulator";
+        String malfunctionedRobotTopic = "device/malfunctionedRobot";
+        try {
+            MqttClient client = new MqttClient(broker, clientId);
+            MqttConnectOptions options = new MqttConnectOptions();
+            options.setCleanSession(true);
+            client.connect(options);
+
+            MqttMessage message = new MqttMessage();
+            message.setPayload(robotLocation.toString().getBytes());
+            client.publish(malfunctionedRobotTopic, message);
+            client.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
-//    public static void suscribeToTechnicians(String techniciansTopic) {
-//        String broker = "tcp://localhost:1883";
-//        String clientId = "JavaSimulator";
-//        try {
-//            MqttClient client = new MqttClient(broker, clientId);
-//            MqttConnectOptions options = new MqttConnectOptions();
-//            options.setCleanSession(true);
-//            client.connect(options);
-//
-//            client.subscribe(techniciansTopic, (topic1, message) -> {
-//                System.out.println("Received message: " + new String(message.getPayload()));
-//                technicians = new String(message.getPayload());
-//                System.out.println("Topic: " + topic1);
-//            });
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//
-//        }
-//    }
+    //TODO: use this instead after you add id to robot
+    /*
+    public static void publishMalfunctionedRobot(String robotId, Location robotLocation) {
+        String broker = "tcp://localhost:1883";
+        String clientId = "JavaSimulator";
+        String malfunctionedRobotTopic = "device/malfunctionedRobot";
+        try {
+            MqttClient client = new MqttClient(broker, clientId);
+            MqttConnectOptions options = new MqttConnectOptions();
+            options.setCleanSession(true);
+            client.connect(options);
+
+            MqttMessage message = new MqttMessage();
+            // set payload to location + robotID
+            message.setPayload(( robotId + robotLocation.toString()).getBytes());
+            client.publish(malfunctionedRobotTopic, message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    */
+
 }

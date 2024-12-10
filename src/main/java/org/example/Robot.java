@@ -1,16 +1,13 @@
 package org.example;
 
 public class Robot {
+    private String id;
     private Location location;
-    private String status;
-    private int batteryLevel;
-    private Event event;
-    private boolean isMovable = true;
+    private boolean isMalfunctioned = false;
 
 
-    public Robot(String status) {
-        this.status = status;
-    }
+
+
 
     public Location getLocation() {
         return location;
@@ -18,22 +15,6 @@ public class Robot {
 
     public void setLocation(Location location) {
         this.location = location;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public int getBatteryLevel() {
-        return batteryLevel;
-    }
-
-    public void setBatteryLevel(int batteryLevel) {
-        this.batteryLevel = batteryLevel;
     }
 
     public void moveUp(double distance){
@@ -52,20 +33,29 @@ public class Robot {
         this.location.setLatitude(this.location.getLatitude()-distance);
     }
 
-    public Event getEvent() {
-        return event;
+    public String getId() {
+        return id;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public boolean isMovable() {
-        return isMovable;
+    public boolean isMalfunctioned() {
+        return isMalfunctioned;
     }
 
-    public void setMovable(boolean isMovable) {
-        this.isMovable = isMovable;
+    public void setMalfunctioned(boolean isMovable) {
+        this.isMalfunctioned = isMovable;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"id\": \"" + id + "\"/" +
+                "\"location\": " + location + "/" +
+                "\"isMalfunctioned\": " + isMalfunctioned +
+                "}";
     }
 
 

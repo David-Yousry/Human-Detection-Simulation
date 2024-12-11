@@ -99,6 +99,36 @@ public class SubscriberService {
         }
     }
 
+    public static void subscribeToHumanDetection() {
+
+        String humanDetectionTopic = "device/humanDetection";
+        try {
+            client.subscribe(humanDetectionTopic, (topic1, message) -> {
+                String payload = new String(message.getPayload());
+
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(Location.class, new LocationDeserializer())
+                        .create();
+                HumanDetection humanDetection = gson.fromJson(payload, HumanDetection.class);
+
+                InsertDetectionInDB(humanDetection);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void InsertDetectionInDB(HumanDetection humanDetection) {
+        MongoCollection<Document> humansCollection = database.getCollection("detectedhumans");
+        Gson gson = new Gson();
+        String json;
+        Document document;
+        json = gson.toJson(humanDetection);
+        document = Document.parse(json);
+        humansCollection.insertOne(document);
+        System.out.println("human" + humanDetection.getRobotId() + " saved successfully!");
+    }
+
 
 
 

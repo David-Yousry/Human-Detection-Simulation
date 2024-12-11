@@ -14,7 +14,8 @@ public class Main {
         PublisherService.connectService();
 
         List<Robot> newRobots;
-        Robot malfunctionedRobot;
+//        Robot malfunctionedRobot;
+        HumanDetection humanDetection;
 
         SubscriberService.fetchRobots();
         while(SubscriberService.robots == null || SubscriberService.robots.isEmpty()){
@@ -38,13 +39,23 @@ public class Main {
             Thread.sleep(5000);
 
 
+
             newRobots = moveRobotsSimultaneously(SubscriberService.robots,1);
-            malfunctionedRobot = malfuncitonRobot(newRobots);
-            malfunctionedRobot.setMalfunctioned(true);
-            for (Robot robot : newRobots) {
-                System.out.println(robot.isMalfunctioned());
-            }
+
+
+            // to malfunction a robot
+//            malfunctionedRobot = malfuncitonRobot(newRobots);
+//            malfunctionedRobot.setMalfunctioned(true);
+//            for (Robot robot : newRobots) {
+//                System.out.println(robot.isMalfunctioned());
+//            }
+
+            humanDetection = detectHuman(newRobots);
+
             SubscriberService.subscribeToRobots();
+            SubscriberService.subscribeToHumanDetection();
+
+            PublisherService.publishHumanDetection(humanDetection);
             PublisherService.publishRobots(newRobots);
 
 //            moveRobotsSimultaneously(robots,20);

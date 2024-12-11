@@ -13,9 +13,6 @@ public class RobotSimulation {
         return new Location(latitude, longitude);
     }
 
-//    public static int generateBatteryLevel(int min, int max){
-//        return (int) (min + Math.random() * (max - min));
-//    }
 
     public static Robot generateRandomRobotLocation(Robot robot){
         Location location = generateRandomLocation(
@@ -109,6 +106,21 @@ public class RobotSimulation {
         // pick a random robot
         Random random = new Random();
         return robots.get(random.nextInt(robots.size()));
+
+    }
+
+    public static HumanDetection detectHuman(List<Robot> robots){
+        Random random = new Random();
+        Robot detectionRobot = robots.get(random.nextInt(robots.size()));
+
+        Location humanLocation = generateRandomLocation(
+                detectionRobot.getLocation().getLatitude() - 0.001,
+                detectionRobot.getLocation().getLatitude() + 0.001,
+                detectionRobot.getLocation().getLongitude() - 0.001,
+                detectionRobot.getLocation().getLongitude() + 0.001
+        );
+
+        return new HumanDetection(detectionRobot.getId(), humanLocation);
 
     }
 

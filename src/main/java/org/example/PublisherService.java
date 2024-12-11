@@ -36,8 +36,17 @@ public class PublisherService {
         }
     }
 
-    //json
-    // robot -> location
-    // document
+    public static void publishHumanDetection(HumanDetection humanDetection){
+        String humanDetectionTopic = "device/humanDetection";
+        try {
+            MqttMessage message = new MqttMessage();
+            message.setPayload(humanDetection.toString().getBytes());
+
+            client.publish(humanDetectionTopic, message);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

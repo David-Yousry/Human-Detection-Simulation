@@ -2,15 +2,17 @@ package org.example;
 
 import java.util.Date;
 
-public class HumanDetection {
+public class Detection {
     private String robotId;
     private Location location;
     private String detectionTime;
+    private String detectionType;
 
-    public HumanDetection(String robotId, Location location) {
+    public Detection(String robotId, Location location, String detectionType) {
         this.robotId = robotId;
         this.location = location;
         this.detectionTime = new Date().toString();
+        this.detectionType = detectionType;
     }
 
     public String getRobotId() {
@@ -37,12 +39,21 @@ public class HumanDetection {
         this.detectionTime = DetectionTime;
     }
 
+    public String getDetectionType() {
+        return detectionType;
+    }
+
+    public void setDetectionType(String detectionType) {
+        this.detectionType = detectionType;
+    }
+
     @Override
     public String toString() {
         return "{" +
                 "\"robotId\": \"" + robotId + "\"," +
                 "\"location\": " + location + "," +
-                "\"detectionTime\": \"" + detectionTime + "\"" +
+                "\"detectionTime\": \"" + detectionTime + "\"," +
+                "\"detectionType\": \"" + detectionType + "\"" +
                 "}";
     }
 }

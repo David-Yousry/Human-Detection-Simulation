@@ -1,7 +1,5 @@
 package org.example;
 
-import com.mongodb.client.MongoCollection;
-import org.bson.Document;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -36,13 +34,13 @@ public class PublisherService {
         }
     }
 
-    public static void publishHumanDetection(HumanDetection humanDetection){
-        String humanDetectionTopic = "device/humanDetection";
+    public static void publishDetection(Detection detection){
+        String DetectionTopic = "device/Detection";
         try {
             MqttMessage message = new MqttMessage();
-            message.setPayload(humanDetection.toString().getBytes());
+            message.setPayload(detection.toString().getBytes());
 
-            client.publish(humanDetectionTopic, message);
+            client.publish(DetectionTopic, message);
         } catch (MqttException e) {
             e.printStackTrace();
         }

@@ -101,32 +101,33 @@ public class SubscriberService {
 
     public static void subscribeToHumanDetection() {
 
-        String humanDetectionTopic = "device/humanDetection";
+        String DetectionTopic = "device/Detection";
         try {
-            client.subscribe(humanDetectionTopic, (topic1, message) -> {
+            client.subscribe(DetectionTopic, (topic1, message) -> {
                 String payload = new String(message.getPayload());
+                System.out.println("Payload: " + payload);
 
                 Gson gson = new GsonBuilder()
                         .registerTypeAdapter(Location.class, new LocationDeserializer())
                         .create();
-                HumanDetection humanDetection = gson.fromJson(payload, HumanDetection.class);
+                Detection detection = gson.fromJson(payload, Detection.class);
 
-                InsertDetectionInDB(humanDetection);
+                InsertDetectionInDB(detection);
             });
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void InsertDetectionInDB(HumanDetection humanDetection) {
-        MongoCollection<Document> humansCollection = database.getCollection("detectedhumans");
+    public static void InsertDetectionInDB(Detection detection) {
+        MongoCollection<Document> detectionCollection = database.getCollection("detections");
         Gson gson = new Gson();
         String json;
         Document document;
-        json = gson.toJson(humanDetection);
+        json = gson.toJson(detection);
         document = Document.parse(json);
-        humansCollection.insertOne(document);
-        System.out.println("human" + humanDetection.getRobotId() + " saved successfully!");
+        detectionCollection.insertOne(document);
+        System.out.println(detection.getDetectionType() + "detection: " + detection.getRobotId() + " saved successfully!");
     }
 
 

@@ -109,18 +109,24 @@ public class RobotSimulation {
 
     }
 
-    public static HumanDetection detectHuman(List<Robot> robots){
+    public static Detection detect(List<Robot> robots){
         Random random = new Random();
         Robot detectionRobot = robots.get(random.nextInt(robots.size()));
 
-        Location humanLocation = generateRandomLocation(
+        Location detectionLocation = generateRandomLocation(
                 detectionRobot.getLocation().getLatitude() - 0.001,
                 detectionRobot.getLocation().getLatitude() + 0.001,
                 detectionRobot.getLocation().getLongitude() - 0.001,
                 detectionRobot.getLocation().getLongitude() + 0.001
         );
 
-        return new HumanDetection(detectionRobot.getId(), humanLocation);
+        // 2 out of 10 times the detection is a human
+        if(random.nextInt(10) < 3){
+            return new Detection(detectionRobot.getId(), detectionLocation, "humanDetection");
+        }
+
+
+        return new Detection(detectionRobot.getId(), detectionLocation, "obstacleDetection");
 
     }
 

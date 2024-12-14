@@ -10,11 +10,15 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
 
+
+
+
+
+
         SubscriberService.connectService();
         PublisherService.connectService();
 
         List<Robot> newRobots;
-//        Robot malfunctionedRobot;
         Detection detection;
 
         SubscriberService.fetchRobots();
@@ -36,20 +40,17 @@ public class Main {
 
 
         while (true) {
+            //TODO make it sleep for 10 milliseconds, and make the detection percentage so low
+            // so that the robots will move more frequently and the detection will be less frequent
             Thread.sleep(5000);
 
 
 
+            // TODO make it move for 5 seconds then save in DB
             newRobots = moveRobotsSimultaneously(SubscriberService.robots,2);
 
 
-            // to malfunction a robot
-//            malfunctionedRobot = malfuncitonRobot(newRobots);
-//            malfunctionedRobot.setMalfunctioned(true);
-//            for (Robot robot : newRobots) {
-//                System.out.println(robot.isMalfunctioned());
-//            }
-
+            // TODO make the detection a 10% chance
             detection = detect(newRobots);
 
             SubscriberService.subscribeToRobots();

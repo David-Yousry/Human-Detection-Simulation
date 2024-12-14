@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class Detection {
     private String robotId;
@@ -11,8 +12,9 @@ public class Detection {
     public Detection(String robotId, Location location, String detectionType) {
         this.robotId = robotId;
         this.location = location;
-        this.detectionTime = new Date().toString();
         this.detectionType = detectionType;
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        this.detectionTime = isoFormat.format(new Date());
     }
 
     public String getRobotId() {
@@ -50,10 +52,10 @@ public class Detection {
     @Override
     public String toString() {
         return "{" +
+                "\"detectionType\": \"" + detectionType + "\"," +
                 "\"robotId\": \"" + robotId + "\"," +
                 "\"location\": " + location + "," +
-                "\"detectionTime\": \"" + detectionTime + "\"," +
-                "\"detectionType\": \"" + detectionType + "\"" +
+                "\"detectionTime\": \"" + detectionTime + "\"" +
                 "}";
     }
 }

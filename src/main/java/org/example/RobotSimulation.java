@@ -67,13 +67,9 @@ public class RobotSimulation {
         while(seconds > 0){
             Thread.sleep(1000);
             for(Robot robot: robots) {
-                if(robot.isMalfunctioned()){
-                    System.out.println("cant move malfunctioned robot with id" + robot.getId());
-                    continue;
-                }
                 System.out.println("second: "+ seconds);
                 System.out.println("Robot "+  robots.indexOf(robot)+" location: " + robot.getLocation().getLatitude() + ", " + robot.getLocation().getLongitude());
-                double distance = 0.001 + Math.random() * 0.004;
+                double distance = Location.MIN_MOVEMENT_OFFSET + Math.random() * (Location.MAX_MOVEMENT_OFFSET-Location.MIN_MOVEMENT_OFFSET);
                 System.out.println("Moving robot " + distance + " units");
                 int direction = (int) (Math.random() * 4);
                 switch (direction) {
@@ -102,22 +98,16 @@ public class RobotSimulation {
 
     }
 
-    public static Robot malfuncitonRobot(List<Robot> robots){
-        // pick a random robot
-        Random random = new Random();
-        return robots.get(random.nextInt(robots.size()));
-
-    }
 
     public static Detection detect(List<Robot> robots){
         Random random = new Random();
         Robot detectionRobot = robots.get(random.nextInt(robots.size()));
 
         Location detectionLocation = generateRandomLocation(
-                detectionRobot.getLocation().getLatitude() - 0.001,
-                detectionRobot.getLocation().getLatitude() + 0.001,
-                detectionRobot.getLocation().getLongitude() - 0.001,
-                detectionRobot.getLocation().getLongitude() + 0.001
+                detectionRobot.getLocation().getLatitude() - Location.DETECTION_LATITUDE_OFFSET,
+                detectionRobot.getLocation().getLatitude() + Location.DETECTION_LATITUDE_OFFSET,
+                detectionRobot.getLocation().getLongitude() - Location.DETECTION_LONGITUDE_OFFSET,
+                detectionRobot.getLocation().getLongitude() + Location.DETECTION_LONGITUDE_OFFSET
         );
 
         // 2 out of 10 times the detection is a human

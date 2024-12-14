@@ -3,7 +3,6 @@ package org.example;
 public class Robot {
     private String id;
     private Location location;
-    private boolean isMalfunctioned = false;
 
 
 
@@ -41,20 +40,12 @@ public class Robot {
         this.id = id;
     }
 
-    public boolean isMalfunctioned() {
-        return isMalfunctioned;
-    }
-
-    public void setMalfunctioned(boolean isMovable) {
-        this.isMalfunctioned = isMovable;
-    }
 
     @Override
     public String toString() {
         return "{" +
                 "\"id\": \"" + id + "\"/" +
-                "\"location\": " + location + "/" +
-                "\"isMalfunctioned\": " + isMalfunctioned +
+                "\"location\": " + location +
                 "}";
     }
 
